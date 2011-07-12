@@ -30,9 +30,7 @@ public interface AsyncRestOperations {
 	 * @param uriVariables the variables to expand the template
 	 * @return the converted object
 	 */
-	<T> Promise<T> getForObject(String url,
-															Class<T> responseType,
-															Object... uriVariables) throws RestClientException;
+	<T> Promise<T> getForObject(String url, Class<T> responseType, Object... uriVariables) throws RestClientException;
 
 	/**
 	 * Retrieve a representation by doing a GET on the URI template.
@@ -44,9 +42,7 @@ public interface AsyncRestOperations {
 	 * @param uriVariables the map containing variables for the URI template
 	 * @return the converted object
 	 */
-	<T> Promise<T> getForObject(String url,
-															Class<T> responseType,
-															Map<String, ?> uriVariables) throws RestClientException;
+	<T> Promise<T> getForObject(String url, Class<T> responseType, Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
 	 * Retrieve a representation by doing a GET on the URL .
@@ -56,8 +52,7 @@ public interface AsyncRestOperations {
 	 * @param responseType the type of the return value
 	 * @return the converted object
 	 */
-	<T> Promise<T> getForObject(URI url,
-															Class<T> responseType) throws RestClientException;
+	<T> Promise<T> getForObject(URI url, Class<T> responseType) throws RestClientException;
 
 	/**
 	 * Retrieve an entity by doing a GET on the specified URL.
@@ -70,8 +65,7 @@ public interface AsyncRestOperations {
 	 * @return the entity
 	 * @since 3.0.2
 	 */
-	<T> Promise<ResponseEntity<T>> getForEntity(String url,
-																							Class<T> responseType,
+	<T> Promise<ResponseEntity<T>> getForEntity(String url, Class<T> responseType,
 																							Object... uriVariables) throws RestClientException;
 
 	/**
@@ -85,8 +79,7 @@ public interface AsyncRestOperations {
 	 * @return the converted object
 	 * @since 3.0.2
 	 */
-	<T> Promise<ResponseEntity<T>> getForEntity(String url,
-																							Class<T> responseType,
+	<T> Promise<ResponseEntity<T>> getForEntity(String url, Class<T> responseType,
 																							Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
@@ -98,8 +91,7 @@ public interface AsyncRestOperations {
 	 * @return the converted object
 	 * @since 3.0.2
 	 */
-	<T> Promise<ResponseEntity<T>> getForEntity(URI url,
-																							Class<T> responseType) throws RestClientException;
+	<T> Promise<ResponseEntity<T>> getForEntity(URI url, Class<T> responseType) throws RestClientException;
 
 	// HEAD
 
@@ -111,8 +103,7 @@ public interface AsyncRestOperations {
 	 * @param uriVariables the variables to expand the template
 	 * @return all HTTP headers of that resource
 	 */
-	Promise<HttpHeaders> headForHeaders(String url,
-																			Object... uriVariables) throws RestClientException;
+	Promise<HttpHeaders> headForHeaders(String url, Object... uriVariables) throws RestClientException;
 
 	/**
 	 * Retrieve all headers of the resource specified by the URI template.
@@ -122,8 +113,7 @@ public interface AsyncRestOperations {
 	 * @param uriVariables the map containing variables for the URI template
 	 * @return all HTTP headers of that resource
 	 */
-	Promise<HttpHeaders> headForHeaders(String url,
-																			Map<String, ?> uriVariables) throws RestClientException;
+	Promise<HttpHeaders> headForHeaders(String url, Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
 	 * Retrieve all headers of the resource specified by the URL.
@@ -148,9 +138,7 @@ public interface AsyncRestOperations {
 	 * @return the value for the <code>Location</code> header
 	 * @see HttpEntity
 	 */
-	Promise<URI> postForLocation(String url,
-															 Object request,
-															 Object... uriVariables) throws RestClientException;
+	Promise<URI> postForLocation(String url, Object request, Object... uriVariables) throws RestClientException;
 
 	/**
 	 * Create a new resource by POSTing the given object to the URI template, and returns the value of the
@@ -165,9 +153,7 @@ public interface AsyncRestOperations {
 	 * @return the value for the <code>Location</code> header
 	 * @see HttpEntity
 	 */
-	Promise<URI> postForLocation(String url,
-															 Object request,
-															 Map<String, ?> uriVariables) throws RestClientException;
+	Promise<URI> postForLocation(String url, Object request, Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
 	 * Create a new resource by POSTing the given object to the URL, and returns the value of the
@@ -180,8 +166,7 @@ public interface AsyncRestOperations {
 	 * @return the value for the <code>Location</code> header
 	 * @see HttpEntity
 	 */
-	Promise<URI> postForLocation(URI url,
-															 Object request) throws RestClientException;
+	Promise<URI> postForLocation(URI url, Object request) throws RestClientException;
 
 	/**
 	 * Create a new resource by POSTing the given object to the URI template,
@@ -197,9 +182,7 @@ public interface AsyncRestOperations {
 	 * @return the converted object
 	 * @see HttpEntity
 	 */
-	<T> Promise<T> postForObject(String url,
-															 Object request,
-															 Class<T> responseType,
+	<T> Promise<T> postForObject(String url, Object request, Class<T> responseType,
 															 Object... uriVariables) throws RestClientException;
 
 	/**
@@ -216,9 +199,7 @@ public interface AsyncRestOperations {
 	 * @return the converted object
 	 * @see HttpEntity
 	 */
-	<T> Promise<T> postForObject(String url,
-															 Object request,
-															 Class<T> responseType,
+	<T> Promise<T> postForObject(String url, Object request, Class<T> responseType,
 															 Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
@@ -233,9 +214,7 @@ public interface AsyncRestOperations {
 	 * @return the converted object
 	 * @see HttpEntity
 	 */
-	<T> Promise<T> postForObject(URI url,
-															 Object request,
-															 Class<T> responseType) throws RestClientException;
+	<T> Promise<T> postForObject(URI url, Object request, Class<T> responseType) throws RestClientException;
 
 	/**
 	 * Create a new resource by POSTing the given object to the URI template,
@@ -251,9 +230,7 @@ public interface AsyncRestOperations {
 	 * @see HttpEntity
 	 * @since 3.0.2
 	 */
-	<T> Promise<ResponseEntity<T>> postForEntity(String url,
-																							 Object request,
-																							 Class<T> responseType,
+	<T> Promise<ResponseEntity<T>> postForEntity(String url, Object request, Class<T> responseType,
 																							 Object... uriVariables) throws RestClientException;
 
 	/**
@@ -270,9 +247,7 @@ public interface AsyncRestOperations {
 	 * @see HttpEntity
 	 * @since 3.0.2
 	 */
-	<T> Promise<ResponseEntity<T>> postForEntity(String url,
-																							 Object request,
-																							 Class<T> responseType,
+	<T> Promise<ResponseEntity<T>> postForEntity(String url, Object request, Class<T> responseType,
 																							 Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
@@ -287,9 +262,7 @@ public interface AsyncRestOperations {
 	 * @see HttpEntity
 	 * @since 3.0.2
 	 */
-	<T> Promise<ResponseEntity<T>> postForEntity(URI url,
-																							 Object request,
-																							 Class<T> responseType) throws RestClientException;
+	<T> Promise<ResponseEntity<T>> postForEntity(URI url, Object request, Class<T> responseType) throws RestClientException;
 
 	// PUT
 
@@ -304,9 +277,7 @@ public interface AsyncRestOperations {
 	 * @param uriVariables the variables to expand the template
 	 * @see HttpEntity
 	 */
-	void put(String url,
-					 Object request,
-					 Object... uriVariables) throws RestClientException;
+	void put(String url, Object request, Object... uriVariables) throws RestClientException;
 
 	/**
 	 * Creates a new resource by PUTting the given object to URI template.
@@ -319,9 +290,7 @@ public interface AsyncRestOperations {
 	 * @param uriVariables the variables to expand the template
 	 * @see HttpEntity
 	 */
-	void put(String url,
-					 Object request,
-					 Map<String, ?> uriVariables) throws RestClientException;
+	void put(String url, Object request, Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
 	 * Creates a new resource by PUTting the given object to URL.
@@ -332,8 +301,7 @@ public interface AsyncRestOperations {
 	 * @param request the Object to be PUT, may be <code>null</code>
 	 * @see HttpEntity
 	 */
-	void put(URI url,
-					 Object request) throws RestClientException;
+	void put(URI url, Object request) throws RestClientException;
 
 	// DELETE
 
@@ -344,8 +312,7 @@ public interface AsyncRestOperations {
 	 * @param url					the URL
 	 * @param uriVariables the variables to expand in the template
 	 */
-	void delete(String url,
-							Object... uriVariables) throws RestClientException;
+	void delete(String url, Object... uriVariables) throws RestClientException;
 
 	/**
 	 * Delete the resources at the specified URI.
@@ -354,8 +321,7 @@ public interface AsyncRestOperations {
 	 * @param url					the URL
 	 * @param uriVariables the variables to expand the template
 	 */
-	void delete(String url,
-							Map<String, ?> uriVariables) throws RestClientException;
+	void delete(String url, Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
 	 * Delete the resources at the specified URL.
@@ -374,8 +340,7 @@ public interface AsyncRestOperations {
 	 * @param uriVariables the variables to expand in the template
 	 * @return the value of the allow header
 	 */
-	Promise<Set<HttpMethod>> optionsForAllow(String url,
-																					 Object... uriVariables) throws RestClientException;
+	Promise<Set<HttpMethod>> optionsForAllow(String url, Object... uriVariables) throws RestClientException;
 
 	/**
 	 * Return the value of the Allow header for the given URI.
@@ -385,8 +350,7 @@ public interface AsyncRestOperations {
 	 * @param uriVariables the variables to expand in the template
 	 * @return the value of the allow header
 	 */
-	Promise<Set<HttpMethod>> optionsForAllow(String url,
-																					 Map<String, ?> uriVariables) throws RestClientException;
+	Promise<Set<HttpMethod>> optionsForAllow(String url, Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
 	 * Return the value of the Allow header for the given URL.
@@ -411,11 +375,8 @@ public interface AsyncRestOperations {
 	 * @return the response as entity
 	 * @since 3.0.2
 	 */
-	<T> Promise<ResponseEntity<T>> exchange(String url,
-																					HttpMethod method,
-																					HttpEntity<?> requestEntity,
-																					Class<T> responseType,
-																					Object... uriVariables) throws RestClientException;
+	<T> Promise<ResponseEntity<T>> exchange(String url, HttpMethod method, HttpEntity<?> requestEntity,
+																					Class<T> responseType, Object... uriVariables) throws RestClientException;
 
 	/**
 	 * Execute the HTTP method to the given URI template, writing the given request entity to the request, and
@@ -430,11 +391,8 @@ public interface AsyncRestOperations {
 	 * @return the response as entity
 	 * @since 3.0.2
 	 */
-	<T> Promise<ResponseEntity<T>> exchange(String url,
-																					HttpMethod method,
-																					HttpEntity<?> requestEntity,
-																					Class<T> responseType,
-																					Map<String, ?> uriVariables) throws RestClientException;
+	<T> Promise<ResponseEntity<T>> exchange(String url, HttpMethod method, HttpEntity<?> requestEntity,
+																					Class<T> responseType, Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
 	 * Execute the HTTP method to the given URI template, writing the given request entity to the request, and
@@ -447,9 +405,7 @@ public interface AsyncRestOperations {
 	 * @return the response as entity
 	 * @since 3.0.2
 	 */
-	<T> Promise<ResponseEntity<T>> exchange(URI url,
-																					HttpMethod method,
-																					HttpEntity<?> requestEntity,
+	<T> Promise<ResponseEntity<T>> exchange(URI url, HttpMethod method, HttpEntity<?> requestEntity,
 																					Class<T> responseType) throws RestClientException;
 
 	// general execution
@@ -466,11 +422,8 @@ public interface AsyncRestOperations {
 	 * @param uriVariables			the variables to expand in the template
 	 * @return an arbitrary object, as returned by the {@link ResponseExtractor}
 	 */
-	<T> Promise<T> execute(String url,
-												 HttpMethod method,
-												 RequestCallback requestCallback,
-												 ResponseExtractor<T> responseExtractor,
-												 Object... uriVariables) throws RestClientException;
+	<T> Promise<T> execute(String url, HttpMethod method, RequestCallback requestCallback,
+												 ResponseExtractor<T> responseExtractor, Object... uriVariables) throws RestClientException;
 
 	/**
 	 * Execute the HTTP method to the given URI template, preparing the request with the
@@ -484,11 +437,8 @@ public interface AsyncRestOperations {
 	 * @param uriVariables			the variables to expand in the template
 	 * @return an arbitrary object, as returned by the {@link ResponseExtractor}
 	 */
-	<T> Promise<T> execute(String url,
-												 HttpMethod method,
-												 RequestCallback requestCallback,
-												 ResponseExtractor<T> responseExtractor,
-												 Map<String, ?> uriVariables) throws RestClientException;
+	<T> Promise<T> execute(String url, HttpMethod method, RequestCallback requestCallback,
+												 ResponseExtractor<T> responseExtractor, Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
 	 * Execute the HTTP method to the given URL, preparing the request with the
@@ -500,9 +450,7 @@ public interface AsyncRestOperations {
 	 * @param responseExtractor object that extracts the return value from the response
 	 * @return an arbitrary object, as returned by the {@link ResponseExtractor}
 	 */
-	<T> Promise<T> execute(URI url,
-												 HttpMethod method,
-												 RequestCallback requestCallback,
+	<T> Promise<T> execute(URI url, HttpMethod method, RequestCallback requestCallback,
 												 ResponseExtractor<T> responseExtractor) throws RestClientException;
 
 }
