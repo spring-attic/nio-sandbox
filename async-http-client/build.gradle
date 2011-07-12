@@ -1,0 +1,63 @@
+apply plugin: "java"
+apply plugin: "groovy"
+apply plugin: "idea"
+
+configurations {
+	all*.exclude group: "commons-logging"
+	all*.exclude module: "groovy-all", version: "1.8.0-beta-3-SNAPSHOT"
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	mavenRepo(name: "glassfish", urls: "http://download.java.net/maven/glassfish/")
+	mavenRepo(name: "java.net", urls: "http://download.java.net/maven/2")
+	mavenRepo(name: "codehaus", urls: "http://snapshots.repository.codehaus.org")
+	mavenRepo(name: "Spring Milestone", urls: "http://maven.springframework.org/milestone")
+}
+
+dependencies {
+	groovy "org.codehaus.groovy:groovy:1.8.0"
+
+	// Logging
+	compile "org.slf4j:slf4j-api:1.6.1"
+	compile "org.slf4j:jcl-over-slf4j:1.6.1"
+	runtime("log4j:log4j:1.2.15") {
+		exclude(group: "com.sun.jdmk", module: "jmxtools")
+		exclude(group: "com.sun.jmx", module: "jmxri")
+		exclude(group: "javax.jms", module: "jms")
+		exclude(group: "javax.mail", module: "mail")
+	}
+	runtime "org.slf4j:slf4j-log4j12:1.6.1"
+
+	// Grizzly
+	compile "org.glassfish.grizzly:grizzly-http:2.1.1"
+
+  // Spring
+  compile "org.springframework:spring-web:3.1.0.M2"
+  
+	// Commons
+	compile "commons-codec:commons-codec:1.5"
+
+	// Testing
+	testCompile "junit:junit:4.8.2"
+	testCompile "org.spockframework:spock-core:0.5-groovy-1.8"
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = "1.0-milestone-3"
+}
+
+ideaProject {
+	withXml { provider ->
+		def prm = provider.node.component.find { it.@name == 'ProjectRootManager' }
+		prm.@languageLevel = "JDK_1_6"
+		prm.@"project-jdk-name" = "1.6"
+	}
+}
+
+ideaModule {
+	beforeConfigured { module ->
+		module.dependencies.clear()
+	}
+}
