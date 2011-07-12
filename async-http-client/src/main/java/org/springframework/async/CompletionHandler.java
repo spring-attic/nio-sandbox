@@ -1,4 +1,4 @@
-package org.springframework.async.web.client;
+package org.springframework.async;
 
 /**
  * @author Jon Brisbin <jon@jbrisbin.com>
@@ -7,8 +7,8 @@ public interface CompletionHandler<V> {
 
 	void cancelled(boolean force);
 
-	void complete(V obj);
+	void completed(V obj);
 
-	void failure(Throwable throwable);
+	void failed(Throwable throwable);
 
 }
