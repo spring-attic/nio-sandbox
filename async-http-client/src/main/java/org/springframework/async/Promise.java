@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Jon Brisbin <jon@jbrisbin.com>
@@ -12,46 +13,44 @@ public abstract class Promise<V> implements Future<V> {
 
 	private final String futureMutex = "future";
 
-	private Future<V> future;
-	private CompletionHandler<V> completionHandler;
-
-	public Promise(Future<V> future) {
-		this.future = future;
-	}
+	protected AtomicReference<CompletionHandler<V>> completionHandler = new AtomicReference<CompletionHandler<V>>();
+	protected AtomicReference<Throwable> error = new AtomicReference<Throwable>();
 
 	public CompletionHandler<V> getCompletionHandler() {
-		return completionHandler;
+		return completionHandler.get();
 	}
 
 	public Promise<V> setCompletionHandler(CompletionHandler<V> completionHandler) throws Exception {
-		synchronized (futureMutex) {
-			if (future.isDone()) {
-				completionHandler.completed(future.get());
-			} else {
-				this.completionHandler = completionHandler;
-			}
+		Future<V> future = getFuture();
+		if (future.isDone()) {
+			completionHandler.completed(future.get());
+		} else if (future.isCancelled()) {
+			completionHandler.cancelled(true);
+		} else if (null != error.get()) {
+			completionHandler.failed(error.get());
+		} else {
+			this.completionHandler.lazySet(completionHandler);
 		}
 		return this;
 	}
 
-	public Future<V> getFuture() {
-		return future;
-	}
-
 	public void result(V obj) {
 		if (null != completionHandler) {
-			completionHandler.completed(obj);
+			completionHandler.get().completed(obj);
 		} else {
 			handleResult(obj);
 		}
 	}
 
+	protected abstract Future<V> getFuture();
+
 	protected abstract void handleResult(V obj);
 
 	public void failure(Throwable throwable) {
 		if (null != completionHandler) {
-			completionHandler.failed(throwable);
+			completionHandler.get().failed(throwable);
 		} else {
+			this.error.set(throwable);
 			handleFailure(throwable);
 		}
 	}
@@ -59,23 +58,23 @@ public abstract class Promise<V> implements Future<V> {
 	protected abstract void handleFailure(Throwable throwable);
 
 	@Override public boolean cancel(boolean b) {
-		return future.cancel(b);
+		return getFuture().cancel(b);
 	}
 
 	@Override public boolean isCancelled() {
-		return future.isCancelled();
+		return getFuture().isCancelled();
 	}
 
 	@Override public boolean isDone() {
-		return future.isDone();
+		return getFuture().isDone();
 	}
 
 	@Override public V get() throws InterruptedException, ExecutionException {
-		return future.get();
+		return getFuture().get();
 	}
 
 	@Override public V get(long l, TimeUnit timeUnit) throws InterruptedException, ExecutionException, TimeoutException {
-		return future.get(l, timeUnit);
+		return getFuture().get(l, timeUnit);
 	}
 
 }
