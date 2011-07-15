@@ -9,8 +9,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
 
 /**
@@ -277,7 +275,7 @@ public interface AsyncRestOperations {
 	 * @param uriVariables the variables to expand the template
 	 * @see HttpEntity
 	 */
-	void put(String url, Object request, Object... uriVariables) throws RestClientException;
+	Promise<Void> put(String url, Object request, Object... uriVariables) throws RestClientException;
 
 	/**
 	 * Creates a new resource by PUTting the given object to URI template.
@@ -290,7 +288,7 @@ public interface AsyncRestOperations {
 	 * @param uriVariables the variables to expand the template
 	 * @see HttpEntity
 	 */
-	void put(String url, Object request, Map<String, ?> uriVariables) throws RestClientException;
+	Promise<Void> put(String url, Object request, Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
 	 * Creates a new resource by PUTting the given object to URL.
@@ -301,7 +299,7 @@ public interface AsyncRestOperations {
 	 * @param request the Object to be PUT, may be <code>null</code>
 	 * @see HttpEntity
 	 */
-	void put(URI url, Object request) throws RestClientException;
+	Promise<Void> put(URI url, Object request) throws RestClientException;
 
 	// DELETE
 
@@ -312,7 +310,7 @@ public interface AsyncRestOperations {
 	 * @param url					the URL
 	 * @param uriVariables the variables to expand in the template
 	 */
-	void delete(String url, Object... uriVariables) throws RestClientException;
+	Promise<Void> delete(String url, Object... uriVariables) throws RestClientException;
 
 	/**
 	 * Delete the resources at the specified URI.
@@ -321,14 +319,14 @@ public interface AsyncRestOperations {
 	 * @param url					the URL
 	 * @param uriVariables the variables to expand the template
 	 */
-	void delete(String url, Map<String, ?> uriVariables) throws RestClientException;
+	Promise<Void> delete(String url, Map<String, ?> uriVariables) throws RestClientException;
 
 	/**
 	 * Delete the resources at the specified URL.
 	 *
 	 * @param url the URL
 	 */
-	void delete(URI url) throws RestClientException;
+	Promise<Void> delete(URI url) throws RestClientException;
 
 	// OPTIONS
 

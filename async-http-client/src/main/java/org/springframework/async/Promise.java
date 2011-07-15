@@ -1,9 +1,13 @@
 package org.springframework.async;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -11,33 +15,52 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public abstract class Promise<V> implements Future<V> {
 
-	private final String futureMutex = "future";
+	private final String handlerMutex = "handlers";
 
-	protected AtomicReference<CompletionHandler<V>> completionHandler = new AtomicReference<CompletionHandler<V>>();
+	protected LinkedBlockingDeque<CompletionHandler<V>> completionHandlers = new LinkedBlockingDeque<CompletionHandler<V>>();
 	protected AtomicReference<Throwable> error = new AtomicReference<Throwable>();
+	protected AtomicLong timeout = new AtomicLong(30000L);
+	protected V obj;
 
-	public CompletionHandler<V> getCompletionHandler() {
-		return completionHandler.get();
+	public LinkedBlockingDeque<CompletionHandler<V>> getCompletionHandlers() {
+		return completionHandlers;
 	}
 
-	public Promise<V> setCompletionHandler(CompletionHandler<V> completionHandler) throws Exception {
+	public void setTimeout(long timeout) {
+		this.timeout.set(timeout);
+	}
+
+	public Promise<V> addCompletionHandler(CompletionHandler<V> completionHandler) {
 		Future<V> future = getFuture();
 		if (future.isDone()) {
-			completionHandler.completed(future.get());
+			try {
+				completionHandler.completed(null != obj ? obj : future.get(timeout.get(), TimeUnit.MILLISECONDS));
+			} catch (InterruptedException e) {
+				completionHandler.failed(e);
+			} catch (ExecutionException e) {
+				completionHandler.failed(e);
+			} catch (TimeoutException e) {
+				completionHandler.failed(e);
+			}
 		} else if (future.isCancelled()) {
 			completionHandler.cancelled(true);
 		} else if (null != error.get()) {
 			completionHandler.failed(error.get());
 		} else {
-			this.completionHandler.lazySet(completionHandler);
+			this.completionHandlers.add(completionHandler);
 		}
 		return this;
 	}
 
 	public void result(V obj) {
-		if (null != completionHandler) {
-			completionHandler.get().completed(obj);
+		if (!completionHandlers.isEmpty()) {
+			List<CompletionHandler<V>> handlers = new ArrayList<CompletionHandler<V>>(completionHandlers.size());
+			completionHandlers.drainTo(handlers);
+			for (CompletionHandler<V> handler : handlers) {
+				handler.completed(obj);
+			}
 		} else {
+			this.obj = obj;
 			handleResult(obj);
 		}
 	}
@@ -47,8 +70,12 @@ public abstract class Promise<V> implements Future<V> {
 	protected abstract void handleResult(V obj);
 
 	public void failure(Throwable throwable) {
-		if (null != completionHandler) {
-			completionHandler.get().failed(throwable);
+		if (!completionHandlers.isEmpty()) {
+			List<CompletionHandler<V>> handlers = new ArrayList<CompletionHandler<V>>(completionHandlers.size());
+			completionHandlers.drainTo(handlers);
+			for (CompletionHandler<V> handler : handlers) {
+				handler.failed(throwable);
+			}
 		} else {
 			this.error.set(throwable);
 			handleFailure(throwable);
