@@ -1,0 +1,72 @@
+apply plugin: "groovy"
+apply plugin: "idea"
+
+configurations {
+	all*.exclude group: "commons-logging"
+	all*.exclude module: "groovy-all", version: "1.8.0-beta-3-SNAPSHOT"
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	mavenRepo(name: "glassfish", urls: "http://download.java.net/maven/glassfish/")
+	mavenRepo(name: "java.net", urls: "http://download.java.net/maven/2")
+	mavenRepo(name: "codehaus", urls: "http://snapshots.repository.codehaus.org")
+	mavenRepo(name: "Spring Milestone", urls: "http://maven.springframework.org/milestone")
+}
+
+dependencies {
+	groovy "org.codehaus.groovy:groovy:$groovyVersion"
+
+	// Logging
+	compile("log4j:log4j:1.2.15") {
+		exclude(group: "com.sun.jdmk", module: "jmxtools")
+		exclude(group: "com.sun.jmx", module: "jmxri")
+		exclude(group: "javax.jms", module: "jms")
+		exclude(group: "javax.mail", module: "mail")
+	}
+	compile "org.slf4j:slf4j-api:$slf4jVersion"
+	compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
+	compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
+
+	// Grizzly
+	//compile "org.glassfish.grizzly:grizzly-http:$grizzlyVersion"
+	//compile "org.glassfish.grizzly:grizzly-http-server:$grizzlyVersion"
+	//compile "org.glassfish.grizzly:grizzly-http-server-multipart:$grizzlyVersion"
+	//compile "org.glassfish.gmbal:gmbal:3.0.0-b023"
+
+	// Netty
+	//compile "org.jboss.netty:netty:$nettyVersion"
+
+	// Spring Data
+	//compile "org.springframework.data:spring-data-mongodb:$mongoVersion"
+
+	// Jackson
+	//compile "org.codehaus.jackson:jackson-core-asl:$jacksonVersion"
+	//compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
+
+	// Commons
+	//compile "commons-codec:commons-codec:1.5"
+
+	// Testing
+	testCompile "junit:junit:4.8.2"
+	testCompile "org.spockframework:spock-core:$spockVersion"
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = "1.0-milestone-3"
+}
+
+ideaProject {
+	withXml { provider ->
+		def prm = provider.node.component.find { it.@name == 'ProjectRootManager' }
+		prm.@languageLevel = "JDK_1_7"
+		prm.@"project-jdk-name" = "OpenJDK 1.7"
+	}
+}
+
+ideaModule {
+	beforeConfigured { module ->
+		module.dependencies.clear()
+	}
+}

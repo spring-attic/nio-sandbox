@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Jon Brisbin <jon@jbrisbin.com>
  */
-public class AbstractCompletionHandler<V> implements CompletionHandler<V> {
+public class EmptyCompletionHandler<V> implements CompletionHandler<V> {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
