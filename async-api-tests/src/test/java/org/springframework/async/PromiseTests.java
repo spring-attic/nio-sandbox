@@ -12,9 +12,11 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings({"unchecked"})
 public class PromiseTests {
 
-	private final Logger log = LoggerFactory.getLogger(getClass());
+	private static final Logger log = LoggerFactory.getLogger(PromiseTests.class);
 
-	private CompletionHandler<String, CountDownLatch> handler = new CompletionHandler<String, CountDownLatch>() {
+	private static enum Handler implements CompletionHandler<String, CountDownLatch> {
+		INSTANCE;
+
 		@Override public void completed(String result, CountDownLatch latch) {
 			log.info("Got result: " + result + " with attachment: " + latch);
 			latch.countDown();
@@ -24,15 +26,15 @@ public class PromiseTests {
 			log.error(t.getMessage(), t);
 			latch.countDown();
 		}
+	}
 
-	};
 
 	@Test
 	public void testPromiseCompletionHandler() throws InterruptedException {
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		LongRunningAction action = new LongRunningAction();
-		action.executeLongRunningAction(latch).complete(handler);
+		action.executeLongRunningAction(latch).complete(Handler.INSTANCE);
 
 		latch.await();
 	}
@@ -42,7 +44,7 @@ public class PromiseTests {
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		LongRunningAction action = new LongRunningAction();
-		action.executeFailedAction(latch).complete(handler);
+		action.executeFailedAction(latch).complete(Handler.INSTANCE);
 
 		latch.await();
 	}
