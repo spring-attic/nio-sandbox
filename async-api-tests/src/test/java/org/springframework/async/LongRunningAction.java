@@ -30,4 +30,14 @@ public class LongRunningAction {
 		return promise;
 	}
 
+	public <A> Promise<Void, A> executeVoidAction(A attachment) {
+		final Promise<Void, A> promise = new Promise<>(attachment);
+		timer.schedule(new TimerTask() {
+										 @Override public void run() {
+											 promise.setResult(null);
+										 }
+									 }, 1000);
+		return promise;
+	}
+
 }

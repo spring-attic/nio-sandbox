@@ -46,7 +46,8 @@ dependencies {
 	//compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
 
 	// Commons
-	//compile "commons-codec:commons-codec:1.5"
+	compile "commons-cli:commons-cli:1.2"
+	compile "commons-codec:commons-codec:1.5"
 
 	// Testing
 	testCompile "junit:junit:4.8.2"

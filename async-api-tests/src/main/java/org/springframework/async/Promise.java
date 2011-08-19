@@ -1,8 +1,6 @@
 package org.springframework.async;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -11,7 +9,9 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class Promise<T, A> {
 
-	private Deque<T> resultQueue = new ArrayDeque<>(1);
+	private final String handlersMutex = "handlers";
+
+	private T result = null;
 	private AtomicReference<A> attachment = new AtomicReference<>();
 	private List<CompletionHandler<T, A>> handlers = new ArrayList<>();
 
@@ -31,38 +31,39 @@ public class Promise<T, A> {
 		return this;
 	}
 
-	public Promise<T, A> complete(List<CompletionHandler<T, A>> handlers) {
-		for (CompletionHandler<T, A> handler : handlers) {
-			if (resultQueue.isEmpty()) {
-				synchronized (handlers) {
+	public Promise<T, A> setCompletionHandlers(List<CompletionHandler<T, A>> handlers) {
+		synchronized (handlersMutex) {
+			handlers.clear();
+			for (CompletionHandler<T, A> handler : handlers) {
+				if (null == result) {
 					this.handlers.add(handler);
+				} else {
+					handler.completed(result, attachment.get());
 				}
-			} else {
-				handler.completed(resultQueue.peek(), attachment.get());
 			}
 		}
 		return this;
 	}
 
 	@SuppressWarnings({"unchecked"})
-	public Promise<T, A> complete(CompletionHandler<T, A>... handlers) {
+	public Promise<T, A> setCompletionHandler(CompletionHandler<T, A>... handlers) {
 		for (CompletionHandler<T, A> handler : handlers) {
-			if (resultQueue.isEmpty()) {
-				synchronized (handlers) {
+			if (null == result) {
+				synchronized (handlersMutex) {
 					this.handlers.add(handler);
 				}
 			} else {
-				handler.completed(resultQueue.peek(), attachment.get());
+				handler.completed(result, attachment.get());
 			}
 		}
 		return this;
 	}
 
 	public boolean setResult(T result) {
-		if (resultQueue.size() == 0) {
-			resultQueue.push(result);
-			for (CompletionHandler<T, A> handler : handlers) {
-				synchronized (handlers) {
+		if (null == this.result) {
+			this.result = result;
+			synchronized (handlersMutex) {
+				for (CompletionHandler<T, A> handler : handlers) {
 					handler.completed(result, attachment.get());
 				}
 			}
@@ -72,12 +73,13 @@ public class Promise<T, A> {
 		}
 	}
 
-	public void setFailure(Throwable t) {
+	public Promise<T, A> setFailure(Throwable t) {
 		for (CompletionHandler<T, A> handler : handlers) {
-			synchronized (handlers) {
+			synchronized (handlersMutex) {
 				handler.failed(t, attachment.get());
 			}
 		}
+		return this;
 	}
 
 }
