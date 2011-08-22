@@ -1,6 +1,7 @@
 package org.springframework.async.io;
 
 import java.io.IOException;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.util.Objects;
@@ -56,7 +57,7 @@ public class Buffer implements Comparable<Buffer> {
 	}
 
 	public Buffer clear() {
-		buffer = null;
+		if (null != buffer) buffer = null;
 		return this;
 	}
 
@@ -71,7 +72,8 @@ public class Buffer implements Comparable<Buffer> {
 	}
 
 	public byte get() {
-		return null != buffer ? buffer.get() : (byte) '\0';
+		if (null != buffer) buffer.get();
+		throw new BufferUnderflowException();
 	}
 
 	public Buffer get(byte[] b) {
@@ -90,6 +92,7 @@ public class Buffer implements Comparable<Buffer> {
 	}
 
 	public Buffer append(String s) {
+		Objects.requireNonNull(s, "Cannot add null values to a buffer");
 		ensureCapacity(s.length());
 		buffer.put(s.getBytes());
 		return this;
