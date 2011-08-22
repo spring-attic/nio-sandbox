@@ -36,7 +36,7 @@ dependencies {
 	//compile "org.glassfish.gmbal:gmbal:3.0.0-b023"
 
 	// Netty
-	//compile "org.jboss.netty:netty:$nettyVersion"
+	compile "org.jboss.netty:netty:$nettyVersion"
 
 	// Spring Data
 	//compile "org.springframework.data:spring-data-mongodb:$mongoVersion"

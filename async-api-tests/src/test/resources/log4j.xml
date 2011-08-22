@@ -29,6 +29,9 @@
 	<category name="org.springframework.async">
 		<level value="DEBUG"/>
 	</category>
+	<category name="test">
+		<level value="DEBUG"/>
+	</category>
 	<category name="org.glassfish.grizzly">
 		<level value="DEBUG"/>
 	</category>
