@@ -120,7 +120,7 @@ public class Buffer implements Comparable<Buffer> {
 	}
 
 	public int transferTo(WritableByteChannel channel) throws IOException {
-		return channel.write(buffer);
+		return (null != buffer ? channel.write(buffer) : 0);
 	}
 
 	public ByteBuffer getByteBuffer() {
@@ -128,11 +128,11 @@ public class Buffer implements Comparable<Buffer> {
 	}
 
 	@Override public String toString() {
-		return buffer.toString();
+		return null != buffer ? buffer.toString() : null;
 	}
 
 	@Override public int compareTo(Buffer buffer) {
-		return this.buffer.compareTo(buffer.buffer);
+		return (null != buffer ? this.buffer.compareTo(buffer.buffer) : -1);
 	}
 
 	private void ensureCapacity(int atLeast) {
