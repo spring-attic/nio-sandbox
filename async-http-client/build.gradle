@@ -10,10 +10,10 @@ configurations {
 repositories {
 	mavenLocal()
 	mavenCentral()
-	mavenRepo(name: "glassfish", urls: "http://download.java.net/maven/glassfish/")
-	mavenRepo(name: "java.net", urls: "http://download.java.net/maven/2")
-	mavenRepo(name: "codehaus", urls: "http://snapshots.repository.codehaus.org")
-	mavenRepo(name: "Spring Milestone", urls: "http://maven.springframework.org/milestone")
+	mavenRepo(name: "glassfish", urls: "https://download.java.net/maven/glassfish/")
+	mavenRepo(name: "java.net", urls: "https://download.java.net/maven/2")
+	mavenRepo(name: "codehaus", urls: "https://snapshots.repository.codehaus.org")
+	mavenRepo(name: "Spring Milestone", urls: "https://maven.springframework.org/milestone")
 }
 
 dependencies {
